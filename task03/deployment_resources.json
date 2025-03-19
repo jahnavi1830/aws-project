@@ -1,0 +1,56 @@
+{
+  "lambda-basic-execution": {
+    "policy_content": {
+      "Statement": [
+        {
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "dynamodb:PutItem",
+            "dynamodb:Batch*",
+            "dynamodb:DeleteItem",
+            "ssm:PutParameter",
+            "ssm:GetParameter",
+            "kms:Decrypt"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ],
+      "Version": "2012-10-17"
+    },
+    "resource_type": "iam_policy",
+    "tags": {}
+  },
+  "task3_api": {
+        "resource_type": "api_gateway",
+        "deploy_stage": "api",
+        "dependencies": [
+            {
+                "resource_name": "hello_world",
+                "resource_type": "lambda"
+            }
+        ],
+        "resources": {
+            "/hello": {
+                "GET": {
+                    "integration": {
+                        "type": "AWS_PROXY",
+                        "uri": "{{hello_world}}"
+                    },
+                    "request": {},
+                    "response": {
+                        "status_code": 200,
+                        "response_templates": {
+                            "application/json": "{\"statusCode\": 200, \"message\": \"Hello from Lambda\"}"
+                        }
+                    }
+                }
+            }
+        },
+        "tags": {}
+    }
+}
