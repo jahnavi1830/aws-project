@@ -25,32 +25,45 @@
     "resource_type": "iam_policy",
     "tags": {}
   },
+  "hello_world-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "tags": {}
+  },
   "task3_api": {
-        "resource_type": "api_gateway",
-        "deploy_stage": "api",
-        "dependencies": [
-            {
-                "resource_name": "hello_world",
-                "resource_type": "lambda"
-            }
-        ],
-        "resources": {
-            "/hello": {
-                "GET": {
-                    "integration": {
-                        "type": "AWS_PROXY",
-                        "uri": "{{hello_world}}"
-                    },
-                    "request": {},
-                    "response": {
-                        "status_code": 200,
-                        "response_templates": {
-                            "application/json": "{\"statusCode\": 200, \"message\": \"Hello from Lambda\"}"
-                        }
-                    }
-                }
-            }
-        },
-        "tags": {}
-    }
+    "resource_type": "api_gateway",
+    "deploy_stage": "api",
+    "dependencies": [],
+    "resources": {
+      "/hello": {
+        "enable_cors": false,
+        "GET": {
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "lambda_name": "hello_world",
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true,
+          "enable_proxy": false
+        }
+      }
+    },
+    "tags": {}
+  },
+  "sqs_handler-role": {
+    "predefined_policies": [],
+    "principal_service": "lambda",
+    "custom_policies": [
+      "lambda-basic-execution"
+    ],
+    "resource_type": "iam_role",
+    "tags": {}
+  }
 }
